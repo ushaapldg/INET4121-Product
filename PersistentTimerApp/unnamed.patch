@@ -1,0 +1,17 @@
+Index: app/src/main/java/com/example/persistenttimerapp/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/persistenttimerapp/MainActivity.kt b/app/src/main/java/com/example/persistenttimerapp/MainActivity.kt
+--- a/app/src/main/java/com/example/persistenttimerapp/MainActivity.kt
++++ b/app/src/main/java/com/example/persistenttimerapp/MainActivity.kt	(date 1772569526911)
+@@ -35,7 +35,7 @@
+             }
+         }
+ 
+-        timer.scheduleAtFixedRate(TimerTask(), 0, 500)
++        timer.scheduleAtFixedRate(TimeTask(), 0, 500)
+ 
+     }
+ 
