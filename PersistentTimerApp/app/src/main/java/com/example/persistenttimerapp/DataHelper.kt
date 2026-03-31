@@ -7,21 +7,22 @@ import java.text.SimpleDateFormat
 
 class DataHelper(context: Context) {
     private var sharedPref : SharedPreferences = context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
-    private var dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    private var dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
-    private var timerCounting = false;
+    private var timerCounting = false
     private var startTime: Date? = null
     private var stopTime: Date? = null
 
     init {
         timerCounting = sharedPref.getBoolean(COUNTING_KEY, false)
-        val startString = sharedPref.getString(STOP_TIME_KEY, null)
-        if (startString != null)
-            startTime = dateFormat.parse(startString)
+        
+        sharedPref.getString(START_TIME_KEY, null)?.let {
+            startTime = try { dateFormat.parse(it) } catch (e: Exception) { null }
+        }
 
-        val stopString = sharedPref.getString(STOP_TIME_KEY, null)
-        if (startString != null)
-            startTime = dateFormat.parse(startString)
+        sharedPref.getString(STOP_TIME_KEY, null)?.let {
+            stopTime = try { dateFormat.parse(it) } catch (e: Exception) { null }
+        }
     }
 
     fun startTime(): Date? = startTime
@@ -30,7 +31,7 @@ class DataHelper(context: Context) {
         startTime = date
         with(sharedPref.edit()) {
             val stringDate = if (date == null) null else dateFormat.format(date)
-            putString(START_TIME_KEY,stringDate)
+            putString(START_TIME_KEY, stringDate)
             apply()
         }
     }
@@ -41,24 +42,26 @@ class DataHelper(context: Context) {
         stopTime = date
         with(sharedPref.edit()) {
             val stringDate = if (date == null) null else dateFormat.format(date)
-            putString(STOP_TIME_KEY,stringDate)
+            putString(STOP_TIME_KEY, stringDate)
             apply()
         }
     }
+    
     fun timerCounting(): Boolean = timerCounting
 
     fun setTimerCounting(value: Boolean) {
         timerCounting = value
         with(sharedPref.edit()) {
-            putBoolean(COUNTING_KEY,value)
+            putBoolean(COUNTING_KEY, value)
             apply()
         }
     }
 
     fun setCountdownDuration(ms: Long) {
-        val editor = sharedPref.edit()
-        editor.putLong(COUNTDOWN_DURATION_KEY, ms)
-        editor.apply()
+        with(sharedPref.edit()) {
+            putLong(COUNTDOWN_DURATION_KEY, ms)
+            apply()
+        }
     }
 
     fun getCountdownDuration(): Long {

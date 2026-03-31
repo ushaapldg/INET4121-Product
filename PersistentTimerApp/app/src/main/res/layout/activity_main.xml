@@ -1,113 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Root ScrollView to allow the layout to scroll on smaller screens -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    tools:context=".MainActivity">
-
-    <!-- Input section for setting countdown time -->
-    <TextView
-        android:id="@+id/inputLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set Countdown Time"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:paddingTop="20dp"
-        android:paddingBottom="8dp" />
+    android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingBottom="16dp">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".MainActivity">
 
-        <EditText
-            android:id="@+id/inputHours"
-            android:layout_width="64dp"
+        <!-- --- Calendar Header Section --- -->
+        <!-- Contains the month/year title and navigation buttons -->
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="HH"
-            android:inputType="number"
-            android:maxLength="2"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+            android:paddingBottom="16dp">
 
+            <!-- Button to navigate to the previous month -->
+            <ImageButton
+                android:id="@+id/previousMonthButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Previous Month"
+                android:rotation="180"
+                android:src="@android:drawable/ic_media_next" />
+
+            <!-- Displays the currently visible month and year (e.g., January 2024) -->
+            <TextView
+                android:id="@+id/monthYearText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Button to navigate to the next month -->
+            <ImageButton
+                android:id="@+id/nextMonthButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Next Month"
+                android:src="@android:drawable/ic_media_next" />
+
+        </RelativeLayout>
+
+        <!-- Legend showing the days of the week (SUN, MON, etc.) -->
+        <include
+            android:id="@+id/legendLayout"
+            layout="@layout/calendar_day_legend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Main CalendarView component -->
+        <com.kizitonwose.calendar.view.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cv_dayViewResource="@layout/calendar_day_layout"
+            app:cv_orientation="horizontal"
+            app:cv_outDateStyle="endOfRow"
+            app:cv_scrollPaged="true" />
+
+        <!-- Separator line between Calendar and Timer sections -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="24dp"
+            android:background="@android:color/darker_gray" />
+
+        <!-- --- Timer Section --- -->
+
+        <!-- Label for the timer input fields -->
         <TextView
+            android:id="@+id/inputLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" : "
-            android:textSize="20sp"
-            android:textColor="@color/black" />
+            android:paddingTop="10dp"
+            android:paddingBottom="8dp"
+            android:text="Set Countdown Time"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/inputMinutes"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:hint="MM"
-            android:inputType="number"
-            android:maxLength="2"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-
-        <TextView
+        <!-- Input fields for HH:MM:SS format -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" : "
-            android:textSize="20sp"
-            android:textColor="@color/black" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
 
-        <EditText
-            android:id="@+id/inputSeconds"
-            android:layout_width="64dp"
+            <!-- Hours input -->
+            <EditText
+                android:id="@+id/inputHours"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:hint="HH"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" : "
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <!-- Minutes input -->
+            <EditText
+                android:id="@+id/inputMinutes"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:hint="MM"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" : "
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <!-- Seconds input -->
+            <EditText
+                android:id="@+id/inputSeconds"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:hint="SS"
+                android:inputType="number"
+                android:maxLength="2"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <!-- Large display for the remaining countdown time -->
+        <TextView
+            android:id="@+id/timeTV"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="SS"
-            android:inputType="number"
-            android:maxLength="2"
+            android:padding="10dp"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textColor="@color/black"
+            android:textSize="60sp"
+            tools:text="00:00:00" />
 
+        <!-- Control buttons for the timer -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <!-- Toggles between starting and stopping/pausing the timer -->
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/resetButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Resets the timer to 0 and clears input fields -->
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/startButton"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
-    <!-- Timer display -->
-    <TextView
-        android:id="@+id/timeTV"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/place_holder_time"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textAlignment="center"
-        android:textSize="60sp"/>
-
-    <!-- Buttons -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <Button
-            android:id="@+id/startButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/resetButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <Button
-            android:id="@+id/resetButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reset"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/startButton"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+</ScrollView>
