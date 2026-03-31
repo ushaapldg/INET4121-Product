@@ -26,6 +26,10 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.setOnClickListener { startStopAction() }
         binding.resetButton.setOnClickListener { resetAction() }
 
+        binding.preset25Button.setOnClickListener { startPreset(25) }
+        binding.preset5Button.setOnClickListener { startPreset(5) }
+        binding.preset15Button.setOnClickListener { startPreset(15) }
+
         // Restore saved countdown duration
         countdownDurationMs = dataHelper.getCountdownDuration()
 
@@ -49,6 +53,19 @@ class MainActivity : AppCompatActivity() {
         timer.scheduleAtFixedRate(TimeTask(), 0, 500)
     }
 
+    private fun startPreset(minutes: Int) {
+        // Reset any existing timer state first
+        dataHelper.setStopTime(null)
+        dataHelper.setStartTime(null)
+
+        // Set duration and start
+        countdownDurationMs = minutes * 60 * 1000L
+        dataHelper.setCountdownDuration(countdownDurationMs)
+        dataHelper.setStartTime(Date())
+        showTimerMode()
+        startTimer()
+    }
+
     private inner class TimeTask : TimerTask() {
         override fun run() {
             if (dataHelper.timerCounting()) {
@@ -60,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     runOnUiThread {
                         binding.timeTV.text = timeStringFromLong(0)
                         resetAction()
-                        // TODO: trigger an alarm/notification here if you want
+                        // TODO: trigger an alarm/notification
                     }
                 } else {
                     runOnUiThread {
@@ -86,6 +103,9 @@ class MainActivity : AppCompatActivity() {
         binding.inputMinutes.visibility = View.VISIBLE
         binding.inputSeconds.visibility = View.VISIBLE
         binding.inputLabel.visibility = View.VISIBLE
+        binding.preset25Button.visibility = View.VISIBLE
+        binding.preset5Button.visibility = View.VISIBLE
+        binding.preset15Button.visibility = View.VISIBLE
     }
 
     private fun showTimerMode() {
@@ -93,6 +113,9 @@ class MainActivity : AppCompatActivity() {
         binding.inputMinutes.visibility = View.GONE
         binding.inputSeconds.visibility = View.GONE
         binding.inputLabel.visibility = View.GONE
+        binding.preset25Button.visibility = View.GONE
+        binding.preset5Button.visibility = View.GONE
+        binding.preset15Button.visibility = View.GONE
     }
 
     private fun getInputDurationMs(): Long {
